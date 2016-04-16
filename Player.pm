@@ -8,15 +8,10 @@ has symbol => ( is  => 'ro');
 
 # Methods
 
-sub new {
-  my ($self, $c) = @_;
-  #body ... 
-}
-
 sub nextMove {
   my ($self, $c) = @_;
-  #body ...  
-  return $self;
+  my @move;
+  return @move;
 }
 
 1;

@@ -3,18 +3,27 @@ package Human;
 use namespace::autoclean;
 
 use Moose;
+use 5.012;
+
+use Data::Dumper qw/Dumper/;
 
 extends 'Player';
 
 # Variables
-has level => ( is => 'ro' ); # Allow user to choose the AI performance
 
 # Methods
 
 sub nextMove {
   my ($self, $c) = @_;
-  #body ...
-  return $self;
+  my @move;
+  say "Give your next move position, line number and column number separated by space : ";
+  say "Example : 5 4";
+
+  my $entry = <>;
+  chomp $entry;
+  @move = split ' ',$entry; # Split the default variable $_ (the topic)
+  say Dumper($entry);
+  return @move;
 }
 
 1;
