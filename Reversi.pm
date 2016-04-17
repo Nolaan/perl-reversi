@@ -8,6 +8,7 @@ use 5.012;
 use Human;
 use Computer;
 use Data::Dumper qw /Dumper/;
+use List::MoreUtils qw(uniq);
 ##################
 
 
@@ -20,6 +21,8 @@ has White           => ( is  => 'rw' );
 has Turn            => ( is  => 'rw', default => '1' );
 has Movables        => ( is  => 'rw' );
 has PiecesPositions => ( is => 'rw' );
+has scoreX          => ( is => 'rw' );
+has scoreO          => ( is => 'rw' );
 
 # Methods
 
@@ -105,6 +108,8 @@ sub startGame {
     if(scalar @{$self->Movables()} == 0)
     {
       say "No more moves! End of Game!";
+      my $sym = ( $self->scoreX > $self->scoreO ) ? 'X' : '0';
+      say "Player $sym won!";
       last;
     }
   }
@@ -113,10 +118,10 @@ sub startGame {
 
 sub printScore {
   my ($self, $c) = @_;
-  my $scoreX = scalar @{${$self->PiecesPositions()}[0]};
-  my $scoreO = scalar @{${$self->PiecesPositions()}[1]};
+  $self->scoreX(scalar @{${$self->PiecesPositions()}[0]});
+  $self->scoreO(scalar @{${$self->PiecesPositions()}[1]});
 
-  say "Player X : ".$scoreX."| Player O : ".$scoreO;
+  say "Player X : ".$self->scoreX."| Player O : ".$self->scoreO;
 }
 
 sub printBoard {
@@ -370,6 +375,48 @@ sub BUILD {
 sub cls {
   my ($self, $c) = @_;
   system $^O eq 'MSWin32' ? 'cls' : 'clear';
+  return;
+}
+
+sub unik {
+  my ($self, $a) = @_;
+  my @b = @{$a};
+  my $c = \@b;
+  my @indexes;
+  my $i;
+  foreach my $ref ( @{$c}) {
+    # say Dumper $ref->[0];
+    my $size = scalar @{$c};
+    my $seen = 0;
+    for($i=0; $i < $size; $i++ )
+    {
+      if(     ( $c->[$i][0] == $ref->[0] ) 
+          and ( $c->[$i][1] == $ref->[1] ) 
+      )
+      {
+        if($seen == 0)
+        {
+          $seen++;
+        }elsif($seen == 1)
+        {
+          # say "Position $i";
+          push @indexes, $i;
+        }
+      }
+    }
+  }
+  # say "Indexes : ".Dumper(@indexes);
+  my $turn = 0;
+  @indexes = sort(uniq(@indexes));
+  if(scalar @indexes)
+  {
+    foreach my $ind (@indexes) {
+
+      splice @{$c}, $ind-$turn, 1;
+      $turn++;
+    }
+    $self->Movables($c);
+  }
   return;
 }
 
