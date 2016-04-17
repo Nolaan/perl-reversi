@@ -16,7 +16,7 @@ extends 'Player';
 sub nextMove {
   my ($self, $c) = @_;
   my @move;
-  say "Give your next move position, line number and column number separated by space : ";
+  say "Player ".$self->symbol." give your next move position, row number and column number separated by space : ";
   say "Example : 5 4";
 
   my $entry = <>;

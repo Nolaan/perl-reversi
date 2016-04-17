@@ -2,11 +2,15 @@ package Computer;
 use namespace::autoclean;
 
 use Moose;
+use Reversi;
 use 5.012;
+
+use Data::Dumper qw/Dumper/;
 
 extends 'Player';
 
 # Variables
+has game => ( is => 'ro' );
 has level => ( is => 'rw', isa => 'Int' ); # Allow user to choose the AI performance
 
 
@@ -47,6 +51,9 @@ sub nextMove {
 sub nextMoveEasy {
   my ($self, $c) = @_;
   my @move;
+
+  my $rand_row = int(rand(scalar @{$self->game()->Movables()}));
+  @move = @{$self->game()->Movables()->[$rand_row]};
   return @move;
 }
 
