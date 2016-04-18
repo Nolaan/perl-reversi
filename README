@@ -1,0 +1,3 @@
+Object oriented implementation of the Othello/Reversi game in Perl Moose.
+Featuring a Simple and Difficult AI mode.
+
